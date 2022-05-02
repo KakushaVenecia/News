@@ -1,0 +1,83 @@
+import urllib.request, json
+from .models import Articles, Sources
+import os
+
+# News = news.News
+
+#getting api key
+api_key = None
+base_url = None
+articles_url = None
+
+base_url= 'https://newsapi.org/v2/sources?language=en&category={}&apiKey=ecd9433d00f746ea99f7babf9778e4e5'
+get_articles_url ='https://newsapi.org/v2/everything?language=en&sources={}&apiKey=ecd9433d00f746ea99f7babf9778e4e5'
+
+def configure_request(app):
+    global api_key, base_url, get_articles_url
+    api_key = app.config['NEWS_API_KEY']
+
+def get_sources(category):
+  
+    get_sources_url =base_url.format(category, api_key)
+
+
+    with urllib.request.urlopen(get_sources_url) as url_data:
+        get_news_data = url_data.read()
+        get_news_response = json.loads(get_news_data)
+        news_results = None
+
+        if get_news_response['sources']:
+            news_results_list = get_news_response['sources']
+            news_results = process_new_results(news_results_list)
+
+
+    return news_results
+
+def process_new_results(news_list):
+    news_results =[]
+    for news_item in news_list:
+        id=news_item.get('id')
+        name=news_item.get('name')
+        description=news_item.get('description')
+        url=news_item.get('url')
+        category=news_item.get('category')
+        country = news_item.get('country')
+        language =news_item.get('language')
+
+        news_object = Sources(id, name, description, url, category, country, language) 
+        news_results.append(news_object)
+    return news_results
+
+
+def get_articles(source):	
+
+    get_articles_url = articles_url.format(id,api_key)
+
+    with urllib.request.urlopen(get_articles_url) as url:
+        articles_results =json.loads(url.read())
+        articles_object = None
+                
+    if articles_results['articles']:
+        articles_object = process_articles(articles_results['articles'])
+
+    return articles_object
+
+def process_articles(articles_list):
+            
+        articles_object = []
+        for article_item in articles_list:
+            id = article_item.get('id')
+            author = article_item.get('author')
+            title = article_item.get('title')
+            description = article_item.get('description')
+            url = article_item.get('url')
+            image = article_item.get('urlToImage')
+            date = article_item.get('publishedAt')
+                
+        if image:
+            articles_result = Articles(id,author,title,description,url,image,date)
+            articles_object.append(articles_result)	
+
+        return articles_object
+
+

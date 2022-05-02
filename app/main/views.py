@@ -5,14 +5,6 @@ from . import main
 from ..requests import get_sources, get_articles
 from ..models import Sources
 
-
-"""
-https://newsapi.org/v2/everything?q=bitcoin&apiKey={}
-
-https://newsapi.org/v2/sources?language=en&category={}&apiKey={}%27
-"""
-
-
 @main.route('/')
 def index():
 	

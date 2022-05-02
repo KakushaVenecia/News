@@ -11,11 +11,24 @@
 
 {% block content %}
 
-<div class="container-fluid" id="allsources">
-    <div class="overlay">
-        {{ macro.get_articles(articles_list)}}
-    </div>
+<div class="container-fluid mt-5" id="allsources" >
+    <div class="row">
+        <br>
+        {% for article in articles %}
+        <div class="col-lg-4">
+            <div class="card my-2">
 
+                <img class="card-img-top" src="{{article.image}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{article.title}}</h5>
+                    <p class="card-text">{{article.description}}</p>
+
+                    <a href="{{article.url}}" target="_blank" class="btn btn-primary">Read Article</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

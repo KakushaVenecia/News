@@ -1,3 +1,4 @@
+from cgitb import html
 from operator import index
 from flask import render_template,request,url_for
 from . import main
@@ -11,7 +12,8 @@ https://newsapi.org/v2/everything?q=bitcoin&apiKey={}
 https://newsapi.org/v2/sources?language=en&category={}&apiKey={}%27
 """
 
-@main.route('//')
+
+@main.route('/')
 def index():
 	
     general_info= get_sources('general')
@@ -21,7 +23,7 @@ def index():
     return render_template('index.html',general_info = general_info, technology= technology, sports = sports, entertainment =entertainment )
 
 
-@main.route('/sources/<id>')
+@main.route('/articles/<id>')
 def articles(id):
 	'''
 	view articles page

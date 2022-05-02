@@ -1,6 +1,5 @@
 import urllib.request, json
 from .models import Articles, Sources
-import os
 
 # News = news.News
 
@@ -9,11 +8,11 @@ api_key = None
 base_url = None
 articles_url = None
 
-base_url= 'https://newsapi.org/v2/sources?language=en&category={}&apiKey=ecd9433d00f746ea99f7babf9778e4e5'
-get_articles_url ='https://newsapi.org/v2/everything?language=en&sources={}&apiKey=ecd9433d00f746ea99f7babf9778e4e5'
+base_url= 'https://newsapi.org/v2/sources?language=en&category={}&apiKey={}'
+articles_url ='https://newsapi.org/v2/everything?language=en&sources={}&apiKey={}'
 
 def configure_request(app):
-    global api_key, base_url, get_articles_url
+    global api_key, base_url, articles_url
     api_key = app.config['NEWS_API_KEY']
 
 def get_sources(category):
@@ -51,9 +50,9 @@ def process_new_results(news_list):
 
 def get_articles(source):	
 
-    get_articles_url = articles_url.format(id,api_key)
-
-    with urllib.request.urlopen(get_articles_url) as url:
+    get_articles = articles_url.format(source, api_key)
+    print('url: ' ,get_articles)
+    with urllib.request.urlopen(get_articles) as url:
         articles_results =json.loads(url.read())
         articles_object = None
                 
@@ -74,10 +73,8 @@ def process_articles(articles_list):
             image = article_item.get('urlToImage')
             date = article_item.get('publishedAt')
                 
-        if image:
-            articles_result = Articles(id,author,title,description,url,image,date)
-            articles_object.append(articles_result)	
-
+            if image:
+                articles_result = Articles(id,author,title,description,url,image,date)
+                articles_object.append(articles_result)	
+            
         return articles_object
-
-

@@ -1,0 +1,13 @@
+body {
+    background-color: rgb(235, 235, 235);
+    color: rgb(0, 0, 0) !important;
+}
+
+.here {
+    background-color: rgb(66, 131, 82);
+    /* margin-bottom: 2px !important; */
+    /* padding-bottom: 100px; */
+}
+h1{
+    color: aliceblue !important;
+}
